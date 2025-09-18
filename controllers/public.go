@@ -13,6 +13,18 @@ import (
 	"github.com/astaxie/beego/logs"
 )
 
+// 定义 CST 时区变量
+var cstLoc *time.Location
+
+// 初始化函数
+func init() {
+	var err error
+	cstLoc, err = time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		cstLoc = time.FixedZone("CST", 8*3600) // UTC+8
+	}
+}
+
 func LogsSign() string {
 	return strconv.FormatInt(time.Now().UnixNano(), 10)
 }
@@ -42,7 +54,7 @@ func GetTime(timeStr interface{}, timeFormat ...string) string {
 }
 
 // 转换时间为持续时长
-func GetTimeDuration(startTime string,endTime string) string {
+func GetTimeDuration(startTime string, endTime string) string {
 	var tm = "N/A"
 	if startTime != "" && endTime != "" {
 		starT1 := startTime[0:10]
